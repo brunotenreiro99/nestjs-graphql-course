@@ -1,14 +1,15 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Student } from './student.entity';
-import { Repository } from 'typeorm';
+import { MongoRepository } from 'typeorm';
 import { v4 as uuid } from 'uuid';
 import { CreateStudentInput } from './create-student.input';
 
 @Injectable()
 export class StudentService {
   constructor(
-    @InjectRepository(Student) private studentRepository: Repository<Student>,
+    @InjectRepository(Student)
+    private studentRepository: MongoRepository<Student>,
   ) {}
 
   async getStudent(id: string): Promise<Student> {
@@ -17,6 +18,24 @@ export class StudentService {
 
   async getStudents(): Promise<Student[]> {
     return this.studentRepository.find();
+  }
+
+  async getManyStudents(studentIds: string[]): Promise<Student[]> {
+    try {
+      if (typeof studentIds !== 'object' || studentIds.length < 1) {
+        return [];
+      }
+      const students = await this.studentRepository.find({
+        where: { id: { $in: [...studentIds] } },
+      });
+      console.log(students);
+
+      return students;
+    } catch (error) {
+      console.log(error);
+
+      throw new InternalServerErrorException();
+    }
   }
 
   async createStudent(
