@@ -9,3 +9,5 @@
     All the data is going to be stored to a MongoDB ORM
 
     AutoSchemaFile: true -> this flag tells nestjs to save the schema in memory and and regenerate each time we run the application.
+
+    Even tought resolver works like a controller, we need to add them in the providers of the module!!

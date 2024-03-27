@@ -21,5 +21,13 @@ module.exports = {
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
+    "no-unused-vars": "off"
   },
+  "eslintConfig": { // Add this <-----
+
+    "rules": { // rules configuration here <-----
+        "no-unused-vars": "off" 
+    }
+}
+
 };
