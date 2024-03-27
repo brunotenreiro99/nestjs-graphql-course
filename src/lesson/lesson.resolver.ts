@@ -1,15 +1,27 @@
-import { Query, Resolver } from '@nestjs/graphql';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { LessonType } from './lesson.type';
+import { LessonService } from './lesson.service';
+import { CreateLessonInput } from './lesson.input';
 
 @Resolver((of) => LessonType) // defines what this resolver is going to resolve
 export class LessonResolver {
-    @Query(returns => LessonType)
-    lesson() {
-        return {
-            id: 'dsfd',
-            name: 'ddd',
-            startDate: new Date().toISOString(),
-            endDate: new Date().toISOString(),
-        }
-    }
+  constructor(private lessonService: LessonService) {}
+
+  @Query((returns) => LessonType)
+  lesson(@Args('id') id: string) {
+    return this.lessonService.getLesson(id);
+  }
+
+  @Query((returns) => [LessonType])
+  lessons() {
+    return this.lessonService.getLessons();
+  }
+
+  @Mutation((returns) => LessonType)
+  createLesson(
+    @Args('createLessonInput') createLessonInput: CreateLessonInput,
+  ) {
+    return this.lessonService.createLesson(createLessonInput);
+  }
 }
