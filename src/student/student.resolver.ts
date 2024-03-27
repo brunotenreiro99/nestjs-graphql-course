@@ -9,6 +9,11 @@ import { Student } from './student.entity';
 export class StudentResolver {
   constructor(private studentService: StudentService) {}
 
+  @Query((returns) => StudentType)
+  async student(@Args('id') id: string): Promise<Student> {
+    return this.studentService.getStudent(id);
+  }
+
   @Query((returns) => [StudentType])
   async students(): Promise<Student[]> {
     return this.studentService.getStudents();
